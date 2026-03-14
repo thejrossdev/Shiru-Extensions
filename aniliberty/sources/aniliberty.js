@@ -30,7 +30,7 @@ export default new class Aniliberty extends AbstractSource {
     /**
      * @param {import('./types').AnilibertyTorrent[]} entries
      * @param {boolean} [batch=false]
-     * @returns {import('./').TorrentResult[]}
+     * @returns {import('../index.json').TorrentResult[]}
      **/
     #map(entries, batch = false) {
         return entries.map(({
@@ -61,7 +61,7 @@ export default new class Aniliberty extends AbstractSource {
      * @param {string[]} titles
      * @param {{ resolution?: string, exclusions?: string[], episodeCount?: number }} options
      * @param {boolean} [batch=false]
-     * @returns {Promise<import('./').TorrentResult[]>}
+     * @returns {Promise<import('../index.json').TorrentResult[]>}
      */
     async #query(titles, {resolution, exclusions, episode, episodeCount}, batch = false) {
         const searchTitles = [titles['en'], titles['x-jat']]
@@ -82,17 +82,17 @@ export default new class Aniliberty extends AbstractSource {
         return []
     }
 
-    /** @type {import('./').SearchFunction} */
+    /** @type {import('../index.json').SearchFunction} */
     async single({anilistId, episode, episodeCount, titles, exclusions, resolution}) {
         return this.#query(titles, {resolution, exclusions, episode, episodeCount})
     }
 
-    /** @type {import('./').SearchFunction} */
+    /** @type {import('../index.json').SearchFunction} */
     async batch({anilistId, episode, episodeCount, titles, exclusions, resolution}) {
         return this.#query(titles, {resolution, exclusions, episode, episodeCount}, true)
     }
 
-    /** @type {import('./').SearchFunction} */
+    /** @type {import('../index.json').SearchFunction} */
     async movie(opts) {
         return [] // not really applicable for this type of search
     }
