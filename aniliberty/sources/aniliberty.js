@@ -14,9 +14,12 @@ export default new class Aniliberty extends AbstractSource {
 
     /**
      * Prepare title for api query
+     *
+     * @param {string} title
+     * @returns {string}
      */
     #prepareTitle(title) {
-        return title.trim().toLowerCase().replaceAll(' ', '-').replaceAll(':', '')
+        return title.toString().toLowerCase().replaceAll(' ', '-').replaceAll(':', '')
     }
 
     /**
