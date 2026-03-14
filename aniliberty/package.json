@@ -1,0 +1,8 @@
+{
+  "name": "@thejrossdev/aniliberty",
+  "version": "1.0.0",
+  "description": "Aniliberty Extension",
+  "license": "GPLv3",
+  "main": "index.json",
+  "types": "index.d.ts"
+}
