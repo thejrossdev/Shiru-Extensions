@@ -64,9 +64,7 @@ export default new class Aniliberty extends AbstractSource {
      * @returns {Promise<import('../index.json').TorrentResult[]>}
      */
     async #query(titles, {resolution, exclusions, episode, episodeCount}, batch = false) {
-        const searchTitles = [titles['en'], titles['x-jat']]
-
-        for (const searchTitle of searchTitles) {
+        for (const searchTitle of titles) {
             const res = await fetch(this.#buildQuery(searchTitle))
             if (res?.ok) {
                 try {
