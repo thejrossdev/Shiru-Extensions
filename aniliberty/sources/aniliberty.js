@@ -19,7 +19,7 @@ export default new class Aniliberty extends AbstractSource {
      * @returns {string}
      */
     #prepareTitle(title) {
-        return title.toString().toLowerCase().replaceAll(' ', '-').replaceAll(/[:!'"`]/g, '')
+        return title.toString().toLowerCase().replaceAll(/[-.,!?;:()\[\]{}<>«»„“'`"]/g, '').replaceAll(' ', '-')
     }
 
     /**
@@ -37,15 +37,15 @@ export default new class Aniliberty extends AbstractSource {
      **/
     #map(entries, batch = false) {
         return entries.map(({
-            label,
-            magnet,
-            seeders = 0,
-            leechers = 0,
-            completed_times = 0,
-            hash,
-            size,
-            updated_at
-        }) => ({
+                                label,
+                                magnet,
+                                seeders = 0,
+                                leechers = 0,
+                                completed_times = 0,
+                                hash,
+                                size,
+                                updated_at
+                            }) => ({
             title: label,
             link: magnet,
             seeders: seeders >= 30000 ? 0 : seeders,
@@ -67,7 +67,9 @@ export default new class Aniliberty extends AbstractSource {
      * @returns {Promise<import('../index.json').TorrentResult[]>}
      */
     async #query(titles, {resolution, exclusions, episode, episodeCount}, batch = false) {
-        for (const searchTitle of titles) {
+        const filteredTitles = titles.filter(title => !/[\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff\uac00-\ud7ff]/.test(title.toString()))
+
+        for (const searchTitle of filteredTitles) {
             const res = await fetch(this.#buildQuery(searchTitle))
             if (res?.ok) {
                 try {
