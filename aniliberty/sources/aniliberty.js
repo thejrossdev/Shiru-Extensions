@@ -23,7 +23,7 @@ export default new class Aniliberty extends AbstractSource {
      * @param {string} searchTitle
      *  @returns {string}
      * */
-    async #buildQuery(searchTitle) {
+    #buildQuery(searchTitle) {
         return this.routes.release + this.#prepareTitle(searchTitle) + '?include=torrents'
     }
 
