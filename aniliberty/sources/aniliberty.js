@@ -19,7 +19,7 @@ export default new class Aniliberty extends AbstractSource {
      * @returns {string}
      */
     #prepareTitle(title) {
-        return title.toString().toLowerCase().replaceAll(/[-.,!?;:()\[\]{}<>«»„“'`"]/g, '').replaceAll(' ', '-')
+        return title.toString().toLowerCase().replaceAll(/[-.,!?;:()\[\]{}<>«»„“'`"]/g, '').replaceAll(/\s+/g, ' ').replaceAll(' ', '-')
     }
 
     /**
