@@ -30,7 +30,7 @@ export default new class Aniliberty extends AbstractSource {
 	 * */
 	#buildQuery(route, urlParams = []) {
 		const url = new URL(route)
-		for (const urlParam in urlParams) {
+		for (const urlParam of urlParams) {
 			const {key, value} = urlParam
 			url.searchParams.append(key, value)
 		}
@@ -82,7 +82,7 @@ export default new class Aniliberty extends AbstractSource {
 			if (res && res.length > 0) {
 				torrents.push(res);
 			}
-			await this.sleep(500)
+			await this.sleep(150)
 		}
 		
 		// Try search if not found by alias (title)
@@ -94,7 +94,7 @@ export default new class Aniliberty extends AbstractSource {
 				// When fond something it should be needed release
 				return torrents;
 			}
-			await this.sleep(500)
+			await this.sleep(150)
 		}
 		
 		return torrents
