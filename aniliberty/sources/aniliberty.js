@@ -75,13 +75,11 @@ export default new class Aniliberty extends AbstractSource {
 	 */
 	async #query(titles, {resolution, exclusions, episode, episodeCount}, batch = false) {
 		const filteredTitles = titles.filter(title => !/[\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff\uac00-\ud7ff]/.test(title.toString()))
-		const torrents = [];
 		
 		for (const searchTitle of filteredTitles) {
 			const res = await this.#tryGetReleaseByTitleOrId(searchTitle, batch)
 			if (res && res.length > 0) {
-				torrents.push(res);
-				return torrents;
+				return res;
 			}
 			await this.sleep(150)
 		}
@@ -90,15 +88,13 @@ export default new class Aniliberty extends AbstractSource {
 		for (const searchTitle of filteredTitles) {
 			const res = await this.#trySearchByTitle(searchTitle, batch)
 			if (res && res.length > 0) {
-				torrents.push(res);
-				
 				// When fond something it should be needed release
-				return torrents;
+				return res;
 			}
 			await this.sleep(150)
 		}
 		
-		return torrents
+		return []
 	}
 	
 	/**
