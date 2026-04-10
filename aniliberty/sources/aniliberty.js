@@ -81,6 +81,7 @@ export default new class Aniliberty extends AbstractSource {
 			const res = await this.#tryGetReleaseByTitleOrId(searchTitle, batch)
 			if (res && res.length > 0) {
 				torrents.push(res);
+				return torrents;
 			}
 			await this.sleep(150)
 		}
