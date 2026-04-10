@@ -140,8 +140,8 @@ export default new class Aniliberty extends AbstractSource {
 		if (res?.ok) {
 			try {
 				const json = await res.json()
-				if (Array.isArray(json)) {
-					const firstReleaseId = json[0]?.id
+				if (Array.isArray(json) && json.length > 0) {
+					const firstReleaseId = json.shift().id
 					if (firstReleaseId) {
 						return this.#tryGetReleaseByTitleOrId(firstReleaseId, batch)
 					}
