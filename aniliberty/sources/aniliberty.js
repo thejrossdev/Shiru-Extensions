@@ -140,22 +140,53 @@ export default new class Aniliberty extends AbstractSource {
 		if (res?.ok) {
 			try {
 				const json = await res.json()
-				if (Array.isArray(json) && json.length > 0) {
-					let releases = [];
-					// Need to display all search results, since the first result isn't always the one we're looking for
-					for (const jsonRelease of json) {
-						if (!jsonRelease.hasOwnProperty('id')) {
-							continue
-						}
-						releases = [await this.#tryGetReleaseByTitleOrId(jsonRelease.id, batch), ...releases]
+				if (!Array.isArray(json) || json.length === 0) return [];
+				
+				let releases = [];
+				
+				// Need to display all search results, since the first result isn't always the one we're looking for
+				for (const jsonRelease of json) {
+					if (!jsonRelease?.id) continue;
+					
+					const torrents = await this.#tryGetReleaseByTitleOrId(jsonRelease.id, batch);
+					if (Array.isArray(torrents)) {
+						releases.push(...torrents);
 					}
-					return releases;
+					
+					await this.sleep(150);
 				}
+				
+				return this.#deduplicate(releases);
 			} catch (e) {
 			}
 		}
 		
 		return [];
+	}
+	
+	/**
+	 * @param {import('../index.json').TorrentResult[]} torrents
+	 * @returns {import('../index.json').TorrentResult[]}
+	 */
+	#deduplicate(torrents) {
+		const map = new Map();
+		
+		for (const torrent of torrents) {
+			if (!torrent.hash) continue;
+			
+			const existing = map.get(torrent.hash);
+			
+			if (!existing) {
+				map.set(torrent.hash, torrent);
+				continue;
+			}
+			
+			if ((torrent.seeders || 0) > (existing.seeders || 0)) {
+				map.set(torrent.hash, torrent);
+			}
+		}
+		
+		return Array.from(map.values());
 	}
 	
 	/** @type {import('../index.json').SearchFunction} */
